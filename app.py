@@ -20,9 +20,9 @@ class Tosi(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        if re.search(r'\btosi\b', message.content):
+        if re.search(r'\btosi\b', message.content, flags=re.IGNORECASE | re.MULTILINE):
             choice = random.choice(list(twitter['tweet'].items()))
-            text = re.sub('http\S+', '', choice[1].lower(), flags=re.MULTILINE)
+            text = re.sub('http\S+', '', choice[1].lower(), flags=re.IGNORECASE | re.MULTILINE)
             text = re.sub('@\w+', '', text, flags=re.IGNORECASE | re.MULTILINE)
             try:
                 img = twitter['thumbnail'][choice[0]]
