@@ -2,9 +2,14 @@ import discord
 import json
 import random
 import re
+import os
 
-with open('token.txt') as f:
-    token = f.readlines()[0]
+if os.path.exists('token.txt'):
+    with open('token.txt') as f:
+        token = f.readlines()[0]
+else:
+    token = os.environ['TOKEN']
+
 f = open('tweets.json')
 twitter = json.load(f)
 
