@@ -10,6 +10,8 @@ if os.path.exists('token.txt'):
 else:
     token = os.environ['TOKEN']
 
+admin_ids = os.environ['IDS'].split(",")
+
 f = open('tweets.json')
 twitter = json.load(f)
 def clearTweet(text):
@@ -24,7 +26,13 @@ class Tosi(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        if re.search(r'(\s?tosi){2}', message.content, flags=re.IGNORECASE | re.MULTILINE):
+        if message.content == "tosi hadi uykuya":
+            await self.shutdown(message)
+        elif message.content == "tosi uyan":
+            await self.wakeup(message)
+        elif message.guild.get_member(self.user.id).status != discord.Status.online:
+            return
+        elif re.search(r'(\s?tosi){2}', message.content, flags=re.IGNORECASE | re.MULTILINE):
             choice = twitter['tweet']["1643"]
             text = clearTweet(choice)
             img = twitter['thumbnail']["1643"]
@@ -44,6 +52,16 @@ class Tosi(discord.Client):
                 e.set_image(url=img)
                 return await message.channel.send(text, embed=e)
             return await message.channel.send(text)
+
+    async def shutdown(self, message):
+        if str(message.author.id) in admin_ids:
+            await message.channel.send("üşdakka uyuyim madem")
+            await self.change_presence(status=discord.Status.idle)
+
+    async def wakeup(self, message):
+        if str(message.author.id) in admin_ids:
+            await message.channel.send("üşdakka uyumuşdum nevar")
+            await self.change_presence(status=discord.Status.online)
 
 client = Tosi()
 client.run(token)
