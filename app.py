@@ -26,13 +26,17 @@ class Tosi(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        if message.content == "tosi hadi uykuya":
+
+        if re.search(r'((hadi\s?)?((uykuya)|(uyu)|(yat)|(git))\s?[t]+[o]+[s]+[i]+)|([t]+[o]+[s]+[i]+\s?(hadi\s?)?((uykuya)|(uyu)|(yat)|(git)))', message.content, flags=re.IGNORECASE | re.MULTILINE):
             await self.shutdown(message)
-        elif message.content == "tosi uyan":
+
+        elif re.search(r'((hadi\s?)?((uy[a]+n)|(kalk)|(gel))\s?[t]+[o]+[s]+[i]+)|([t]+[o]+[s]+[i]+\s?(hadi\s?)?((uy[a]+n)|(kalk)|(gel)))', message.content, flags=re.IGNORECASE | re.MULTILINE):
             await self.wakeup(message)
+
         elif message.guild.get_member(self.user.id).status != discord.Status.online:
             return
-        elif re.search(r'(\s?tosi){2}', message.content, flags=re.IGNORECASE | re.MULTILINE):
+
+        elif re.search(r'(\s?[t]+[o]+[s]+[i]+){2}', message.content, flags=re.IGNORECASE | re.MULTILINE):
             choice = twitter['tweet']["1643"]
             text = clearTweet(choice)
             img = twitter['thumbnail']["1643"]
@@ -40,7 +44,7 @@ class Tosi(discord.Client):
             e.set_image(url=img)
             return await message.channel.send(text, embed=e)
 
-        elif re.search(r'\btosi\b', message.content, flags=re.IGNORECASE | re.MULTILINE):
+        elif re.search(r'\b[t]+[o]+[s]+[i]+\b', message.content, flags=re.IGNORECASE | re.MULTILINE):
             choice = random.choice(list(twitter['tweet'].items()))
             text = clearTweet(choice[1])
             try:
